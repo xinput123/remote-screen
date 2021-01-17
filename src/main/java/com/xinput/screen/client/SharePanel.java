@@ -13,20 +13,16 @@ public class SharePanel extends JPanel {
   private BufferedImage image;
   ByteArrayInputStream bais;
 
-  // accept and handler byte array from ClientHandler
   public void display(byte[] imageByte) {
     bais = new ByteArrayInputStream(imageByte);
-    // invoke paint()
     this.repaint();
   }
 
-  // paint the capture on the panel
   public void paint(Graphics g) {
     try {
       image = ImageIO.read(bais);
       g.drawImage(image, 0, 0, this);
     } catch (Exception e) {
-      // e.printStackTrace();
     }
   }
 }

@@ -1,27 +1,27 @@
 package com.xinput.screen.client;
 
 public interface IMouseOperation {
-  public int leftClick();
+  int leftClick();
 
-  public int leftDoubleClick();
+  int leftDoubleClick();
 
-  public int leftDown();
+  int leftDown();
 
-  public int leftUp();
+  int leftUp();
 
-  public int rightClick();
+  int rightClick();
 
-  public int rightDown();
+  int rightDown();
 
-  public int rightUp();
+  int rightUp();
 
-  public int middleClick();
+  int middleClick();
 
-  public int middleDown();
+  int middleDown();
 
-  public int middleUp();
+  int middleUp();
 
-  public int wheel(int rotation);
+  int wheel(int rotation);
 
-  public int moveTo(int x, int y);
+  int moveTo(int x, int y);
 }

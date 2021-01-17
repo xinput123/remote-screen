@@ -1,6 +1,6 @@
 package com.xinput.screen.client;
 
-import com.xinput.screen.domain.ShareImage;
+import com.xinput.screen.share.CaptureImage;
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.handler.codec.ReplayingDecoder;
@@ -16,11 +16,11 @@ public class ImageDecoder extends ReplayingDecoder<Void> {
     byte[] content = new byte[length];
     in.readBytes(content);
 
-    ShareImage shareImage = new ShareImage();
-    shareImage.setLength(length);
-    shareImage.setContent(content);
+    CaptureImage captureImage = new CaptureImage();
+    captureImage.setLength(length);
+    captureImage.setContent(content);
 
-    out.add(shareImage);
+    out.add(captureImage);
   }
 
   @Override

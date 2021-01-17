@@ -42,12 +42,16 @@ public class Client {
     try {
       if (address == null || address.equals(""))
         address = "localhost";
-      channel = bootstrap.connect(address, 9999).sync().channel();
+      channel = bootstrap.connect(address, 10010).sync().channel();
     } catch (Exception e) {
       // e.printStackTrace();
       System.err.println("Can't connect to remote screen server...");
       return false;
     }
     return true;
+  }
+
+  public static void main(String[] args) {
+    RemoteScreen.initSetUp();
   }
 }

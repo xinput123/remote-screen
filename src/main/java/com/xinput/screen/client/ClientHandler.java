@@ -1,11 +1,10 @@
 package com.xinput.screen.client;
 
-import com.xinput.screen.domain.ShareImage;
+import com.xinput.screen.share.CaptureImage;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelInboundHandlerAdapter;
 
 public class ClientHandler extends ChannelInboundHandlerAdapter {
-
   @Override
   public void channelActive(ChannelHandlerContext ctx) throws Exception {
 
@@ -19,8 +18,8 @@ public class ClientHandler extends ChannelInboundHandlerAdapter {
   @Override
   public void channelRead(ChannelHandlerContext ctx, Object msg) throws Exception {
     // accept msg from ImageDecoder
-    ShareImage shareImage = (ShareImage) msg;
-    RemoteDesktop.panel.display(shareImage.getContent());
+    CaptureImage captureImage = (CaptureImage) msg;
+    RemoteScreen.panel.display(captureImage.getContent());
     String message = String.format("%20s", "ACK");// send ACK after painting an image
     ctx.writeAndFlush(message + '\n');
   }

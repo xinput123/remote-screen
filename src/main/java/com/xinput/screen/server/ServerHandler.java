@@ -1,6 +1,6 @@
 package com.xinput.screen.server;
 
-import com.xinput.screen.domain.ShareImage;
+import com.xinput.screen.share.CaptureImage;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelInboundHandlerAdapter;
 
@@ -11,30 +11,33 @@ import java.awt.image.BufferedImage;
 import java.io.ByteArrayOutputStream;
 
 public class ServerHandler extends ChannelInboundHandlerAdapter {
-
   private BufferedImage image;
   private Robot robot;
   private Toolkit toolkit;
   private Rectangle rect;
   private ByteArrayOutputStream baos;
-  private ShareImage shareImage;
+  private CaptureImage captureImage;
 
   public ServerHandler() {
     try {
-      // 创建一个机器人
       robot = new Robot();
-      // 定义方法能够直接查询本机操作系统
       toolkit = Toolkit.getDefaultToolkit();
-      // 获取屏幕的大小
-      Dimension dm = toolkit.getScreenSize();
-
-      // 指定坐标空间的区域
-      rect = new Rectangle(0, 0, dm.width, dm.height);
+      rect = new Rectangle(0, 0, toolkit.getScreenSize().width, toolkit.getScreenSize().height);
       baos = new ByteArrayOutputStream();
-      shareImage = new ShareImage();
+      captureImage = new CaptureImage();
     } catch (AWTException e) {
       e.printStackTrace();
     }
+  }
+
+  @Override
+  public void channelActive(ChannelHandlerContext ctx) throws Exception {
+
+  }
+
+  @Override
+  public void channelInactive(ChannelHandlerContext ctx) throws Exception {
+
   }
 
   @Override
@@ -45,9 +48,9 @@ public class ServerHandler extends ChannelInboundHandlerAdapter {
         case "ACK":
           image = robot.createScreenCapture(rect);
           ImageIO.write(image, "jpg", baos);
-          shareImage.setLength(baos.toByteArray().length);
-          shareImage.setContent(baos.toByteArray());
-          ctx.writeAndFlush(shareImage);
+          captureImage.setLength(baos.toByteArray().length);
+          captureImage.setContent(baos.toByteArray());
+          ctx.writeAndFlush(captureImage);
           baos.reset();
           break;
         case "moveTo":

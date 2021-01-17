@@ -1,12 +1,7 @@
-package com.xinput.screen.domain;
+package com.xinput.screen.share;
 
-/**
- * 截图
- */
-public class ShareImage {
-
+public class CaptureImage {
   private int length;
-
   private byte[] content;
 
   public int getLength() {
@@ -24,4 +19,5 @@ public class ShareImage {
   public void setContent(byte[] content) {
     this.content = content;
   }
+
 }

@@ -15,31 +15,25 @@ import io.netty.handler.logging.LoggingHandler;
 
 import java.nio.charset.StandardCharsets;
 
-/**
- * 启动服务端
- */
 public class Server {
-
-  private static final EventLoopGroup bossGroup = new NioEventLoopGroup();
-  private static final EventLoopGroup workerGroup = new NioEventLoopGroup();
-  private static final ServerBootstrap b = new ServerBootstrap();
+  private final static EventLoopGroup bossGroup = new NioEventLoopGroup(1);
+  private final static EventLoopGroup workerGroup = new NioEventLoopGroup();
 
   public static void main(String[] args) {
-    b.group(bossGroup, workerGroup)
-        .channel(NioServerSocketChannel.class)
-        .handler(new LoggingHandler(LogLevel.INFO))
-        .childHandler(new ChannelInitializer<SocketChannel>() {
-          @Override
-          protected void initChannel(SocketChannel channel) throws Exception {
-            ChannelPipeline pipeline = channel.pipeline();
-            pipeline.addLast(new ImageEncoder())
-                .addLast(new LineBasedFrameDecoder(1024))
-                .addLast(new StringDecoder(StandardCharsets.UTF_8))
-                .addLast(new ServerHandler());
-          }
-        });
     try {
-      ChannelFuture future = b.bind(10010).sync();
+      ServerBootstrap b = new ServerBootstrap();
+      b.group(bossGroup, workerGroup);
+      b.channel(NioServerSocketChannel.class);
+      b.handler(new LoggingHandler(LogLevel.INFO)).childHandler(new ChannelInitializer<SocketChannel>() {
+        @Override
+        protected void initChannel(SocketChannel channel) throws Exception {
+          ChannelPipeline pipeline = channel.pipeline();
+          pipeline.addLast(new ImageEncoder());
+          pipeline.addLast(new LineBasedFrameDecoder(1024), new StringDecoder(StandardCharsets.UTF_8), new ServerHandler());
+        }
+      });
+
+      ChannelFuture future = b.bind(9999).sync();
       future.channel().closeFuture().sync();
     } catch (Exception e) {
 
